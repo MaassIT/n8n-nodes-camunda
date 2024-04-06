@@ -1,17 +1,17 @@
 {
-	"node": "n8n-nodes-base.camundaCloudTrigger",
+	"node": "n8n-nodes-base.camundaTrigger",
 	"nodeVersion": "1.0",
 	"codexVersion": "1.0",
 	"categories": ["Development", "Communication", "Productivity"],
 	"resources": {
 		"credentialDocumentation": [
 			{
-				"url": "https://github.com/csuermann/n8n-nodes-camunda-cloud/tree/master/docs/credentials.md"
+				"url": "https://github.com/maassit/n8n-nodes-camunda/tree/master/docs/credentials.md"
 			}
 		],
 		"primaryDocumentation": [
 			{
-				"url": "https://github.com/csuermann/n8n-nodes-camunda-cloud"
+				"url": "https://github.com/maassit/n8n-nodes-camunda"
 			}
 		]
 	}

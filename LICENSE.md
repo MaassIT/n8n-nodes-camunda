@@ -1,4 +1,5 @@
-# Copyright 2022 Cornelius Suermann
+# Copyright 2024 Cornelius Suermann and Maaß IT
+## Thanks to Cornelius Suermann -> Forked Repository
 
 Permission is hereby granted, free of charge, to any person obtaining a copy of
 this software and associated documentation files (the "Software"), to deal in

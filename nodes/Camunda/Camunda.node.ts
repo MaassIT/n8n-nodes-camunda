@@ -1,6 +1,6 @@
-import { IExecuteFunctions } from 'n8n-core';
+// import { IExecuteFunctions } from 'n8n-core';
 
-import { IDataObject, INodeExecutionData, INodeType, INodeTypeDescription } from 'n8n-workflow';
+import { IDataObject, INodeExecutionData, INodeType, INodeTypeDescription, IExecuteFunctions } from 'n8n-workflow';
 
 import { v4 as uuidv4 } from 'uuid';
 
@@ -8,33 +8,32 @@ import {
 	Duration,
 	IProcessVariables,
 	PublishMessageResponse,
-	ZBClient,
-	ZBClientOptions,
 } from 'zeebe-node';
 
-export class CamundaCloud implements INodeType {
+import getZeebeClient from './ZeeBee';
+
+export class Camunda implements INodeType {
 	description: INodeTypeDescription = {
-		displayName: 'Camunda Cloud',
-		name: 'camundaCloud',
+		displayName: 'Camunda',
+		name: 'camunda',
 		subtitle: '={{$parameter["operation"] + ": " + $parameter["resource"]}}',
-		icon: 'file:camundaCloud.svg',
+		icon: 'file:camunda.svg',
 		group: ['transform'],
 		version: 1,
-		description: 'Interact with Camunda Cloud',
+		description: 'Interact with Camunda',
 		defaults: {
-			name: 'Camunda Cloud',
-			color: '#ff6100',
+			name: 'Camunda',
 		},
 		inputs: ['main'],
 		outputs: ['main'],
 		credentials: [
 			{
-				name: 'camundaCloudApi',
-				required: true,
+					name: 'camundaApi',
+					required: true,
 			},
-		],
+	],
 		properties: [
-			{
+		{
 				displayName: 'Resource',
 				name: 'resource',
 				type: 'options',
@@ -110,28 +109,13 @@ export class CamundaCloud implements INodeType {
 				required: true,
 				displayOptions: {
 					show: {
-						operation: ['complete'],
+						operation: ['complete', 'fail'],
 						resource: ['job'],
 					},
 				},
 				default: '',
 				description:
-					'Identifier of an already activated BPMN job, e.g. as returned by the Camunda Cloud Trigger node',
-			},
-			{
-				displayName: 'Job Key',
-				name: 'jobKey',
-				type: 'string',
-				required: true,
-				displayOptions: {
-					show: {
-						operation: ['fail'],
-						resource: ['job'],
-					},
-				},
-				default: '',
-				description:
-					'Identifier of an already activated BPMN job, e.g. as returned by the Camunda Cloud Trigger node',
+					'Identifier of an already activated BPMN job, e.g. as returned by the Camunda Cloud node',
 			},
 			{
 				displayName: 'Error Message',
@@ -264,14 +248,12 @@ export class CamundaCloud implements INodeType {
 		],
 	};
 
+
 	async execute(this: IExecuteFunctions): Promise<INodeExecutionData[][]> {
 		const items = this.getInputData();
 		const returnData = [];
 		const resource = this.getNodeParameter('resource', 0) as string;
 		const operation = this.getNodeParameter('operation', 0) as string;
-		const credentials = await this.getCredentials('camundaCloudApi');
-
-		const { clientId, clientSecret, clusterId, clusterRegion } = credentials;
 
 		for (let i = 0; i < items.length; i++) {
 			try {
@@ -279,22 +261,20 @@ export class CamundaCloud implements INodeType {
 					if (operation === 'create') {
 						const bpmnProcessId = this.getNodeParameter('bpmnProcessId', i) as string;
 
-						let variables = (this.getNodeParameter('variables', i) as unknown) ?? {};
+						let variables: any = this.getNodeParameter('variables', i) ?? {};
 
-						if ('string' === typeof variables) {
-							variables = JSON.parse(variables);
+						if (typeof variables === 'string') {
+								variables = JSON.parse(variables);
 						}
 
-						const zbc = new ZBClient({
-							camundaCloud: {
-								clientId,
-								clientSecret,
-								clusterId,
-								clusterRegion,
-							},
-						} as ZBClientOptions);
+						// Überprüfen, ob die Konvertierung zu einem gültigen Objekt geführt hat
+						if (typeof variables !== 'object' || variables === null || Array.isArray(variables)) {
+								variables = {};
+						}
 
-						const zbCreateProcessResult = await zbc.createProcessInstance(bpmnProcessId, variables);
+						const zbc = await getZeebeClient.call(this);
+
+						const zbCreateProcessResult = await zbc.createProcessInstance({bpmnProcessId, variables});
 
 						//console.log(`zbCreateProcessResult: ${JSON.stringify(zbCreateProcessResult)}`);
 						returnData.push(zbCreateProcessResult as unknown as IDataObject);
@@ -312,14 +292,7 @@ export class CamundaCloud implements INodeType {
 
 						const messageName = this.getNodeParameter('messageName', i) as string;
 
-						const zbc = new ZBClient({
-							camundaCloud: {
-								clientId,
-								clientSecret,
-								clusterId,
-								clusterRegion,
-							},
-						} as ZBClientOptions);
+						const zbc = await getZeebeClient.call(this);
 
 						let zbPublishMsgResult: PublishMessageResponse;
 
@@ -348,14 +321,7 @@ export class CamundaCloud implements INodeType {
 				} else if (resource === 'job') {
 					const jobKey = (this.getNodeParameter('jobKey', i) as string) ?? '';
 
-					const zbc = new ZBClient({
-						camundaCloud: {
-							clientId,
-							clientSecret,
-							clusterId,
-							clusterRegion,
-						},
-					} as ZBClientOptions);
+					const zbc = await getZeebeClient.call(this);
 
 					if (operation === 'complete') {
 						let variables = (this.getNodeParameter('variables', i) as unknown) ?? {};

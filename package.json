@@ -1,21 +1,21 @@
 {
-	"name": "n8n-nodes-camunda-cloud",
+	"name": "n8n-nodes-camunda",
 	"version": "0.0.1",
-	"description": "n8n nodes for interacting with Camunda Cloud (Zeebe)",
+	"description": "n8n nodes for interacting with Camunda (Zeebe)",
 	"keywords": [
 		"n8n-community-node-package",
 		"camunda",
 		"zeebe"
 	],
 	"license": "MIT",
-	"homepage": "https://github.com/csuermann/n8n-nodes-camunda-cloud",
+	"homepage": "https://github.com/maassit/n8n-nodes-camunda",
 	"author": {
-		"name": "Cornelius Suermann",
-		"email": "cornelius@n8n.io"
+		"name": "Christian Maaß",
+		"email": "service@maass.it"
 	},
 	"repository": {
 		"type": "git",
-		"url": "https://github.com/csuermann/n8n-nodes-camunda-cloud"
+		"url": "https://github.com/maassit/n8n-nodes-camunda"
 	},
 	"scripts": {
 		"build": "tsc && gulp build:icons",
@@ -31,16 +31,16 @@
 	"n8n": {
 		"n8nNodesApiVersion": 1,
 		"credentials": [
-			"dist/credentials/CamundaCloudApi.credentials.js"
+			"dist/credentials/CamundaApi.credentials.js"
 		],
 		"nodes": [
-			"dist/nodes/CamundaCloud/CamundaCloud.node.js",
-			"dist/nodes/CamundaCloud/CamundaCloudTrigger.node.js"
+			"dist/nodes/Camunda/Camunda.node.js",
+			"dist/nodes/Camunda/CamundaTrigger.node.js"
 		]
 	},
 	"devDependencies": {
 		"@types/express": "^4.17.6",
-		"@types/node": "^18.6.2",
+		"@types/node": "^20",
 		"@types/request-promise-native": "~1.0.15",
 		"@types/uuid": "^8.3.4",
 		"@typescript-eslint/parser": "^5.29.0",
@@ -53,7 +53,7 @@
 		"typescript": "~4.6.0"
 	},
 	"dependencies": {
-		"uuid": "^8.3.2",
-		"zeebe-node": "^8.0.1"
+		"uuid": "^8",
+		"zeebe-node": "^8"
 	}
 }

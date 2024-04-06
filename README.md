@@ -1,16 +1,16 @@
-# n8n-nodes-camunda-cloud
+# n8n-nodes-camunda
 
-n8n nodes for interacting with Camunda Cloud (Zeebe)
+n8n nodes for interacting with Camunda (Zeebe) -> Cloud and SelfHosted
 
-## Camunda Cloud
+## Camunda (Cloud)
 
-[Camunda Cloud](https://camunda.com/products/cloud/) is a Process Automation as a Service platform with a horizontally scalable [BPMN](https://en.wikipedia.org/wiki/Business_Process_Model_and_Notation) workflow engine (called Zeebe) and built-in tools for collaborative modeling, operations and analytics.
+[Camunda](https://camunda.com/) is a Process Automation as a Service platform with a horizontally scalable [BPMN](https://en.wikipedia.org/wiki/Business_Process_Model_and_Notation) workflow engine (called Zeebe) and built-in tools for collaborative modeling, operations and analytics.
 
 ## Supported Features
 
-- Trigger n8n workflows from Camunda Cloud service tasks
-- Create new Camunda Cloud process instances from n8n
-- Publish messages to running Camunda Cloud process instances from n8n
+- Trigger n8n workflows from Camunda service tasks
+- Create new Camunda process instances from n8n
+- Publish messages to running Camunda process instances from n8n
 
 > ## 🔑 Credentials
 >
@@ -18,7 +18,7 @@ n8n nodes for interacting with Camunda Cloud (Zeebe)
 
 ## Example Use-Case
 
-In this example we combine the advantages of the powerful Camunda Cloud workflow engine with the extensibility of n8n to implement a long-running business process that handles new sign-ups.
+In this example we combine the advantages of the powerful Camunda workflow engine with the extensibility of n8n to implement a long-running business process that handles new sign-ups.
 
 The following BPMN process is already deployed to our Camunda Cloud account. How to do this is out of scope for this guide, but more information can be found [here](https://docs.camunda.io/docs/guides).
 

@@ -1,17 +1,17 @@
 {
-	"node": "n8n-nodes-base.camundaCloud",
+	"node": "n8n-nodes-base.camunda",
 	"nodeVersion": "1.0",
 	"codexVersion": "1.0",
 	"categories": ["Development", "Productivity"],
 	"resources": {
 		"credentialDocumentation": [
 			{
-				"url": "https://docs.n8n.io/credentials/camundaCloud"
+				"url": "https://docs.n8n.io/credentials/camunda"
 			}
 		],
 		"primaryDocumentation": [
 			{
-				"url": "https://docs.n8n.io/nodes/n8n-nodes-base.camundaCloud/"
+				"url": "https://docs.n8n.io/nodes/n8n-nodes-base.camunda/"
 			}
 		]
 	}

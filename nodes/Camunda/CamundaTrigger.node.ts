@@ -1,10 +1,10 @@
-import { ITriggerFunctions } from 'n8n-core';
+// import { ITriggerFunctions } from 'n8n-core';
 import {
 	IDataObject,
 	INodeType,
 	INodeTypeDescription,
+	ITriggerFunctions,
 	ITriggerResponse,
-	NodeOperationError,
 } from 'n8n-workflow';
 
 import {
@@ -12,33 +12,32 @@ import {
 	ICustomHeaders,
 	IInputVariables,
 	IOutputVariables,
-	ZBClient,
-	ZBClientOptions,
 	ZBWorker,
 	ZeebeJob,
 } from 'zeebe-node';
 
-export class CamundaCloudTrigger implements INodeType {
+import getZeebeClient from './ZeeBee';
+
+export class CamundaTrigger implements INodeType {
 	description: INodeTypeDescription = {
-		displayName: 'Camunda Cloud Trigger',
-		name: 'camundaCloudTrigger',
+		displayName: 'Camunda Trigger',
+		name: 'camundaTrigger',
 		subtitle: '=task: {{$parameter["taskType"]',
-		icon: 'file:camundaCloud.svg',
+		icon: 'file:camunda.svg',
 		group: ['trigger'],
 		version: 1,
-		description: 'Triggers an n8n workflow from Camunda Cloud',
+		description: 'Triggers an n8n workflow from Camunda',
 		defaults: {
-			name: 'Camunda Cloud Trigger',
-			color: '#ff6100',
+			name: 'Camunda Trigger',
 		},
 		inputs: [],
 		outputs: ['main'],
 		credentials: [
 			{
-				name: 'camundaCloudApi',
-				required: true,
+					name: 'camundaApi',
+					required: true,
 			},
-		],
+	],
 		properties: [
 			// Node properties which the user gets displayed and
 			// can change on the node.
@@ -70,23 +69,9 @@ export class CamundaCloudTrigger implements INodeType {
 		],
 	};
 
+
 	async trigger(this: ITriggerFunctions): Promise<ITriggerResponse> {
-		const credentials = await this.getCredentials('camundaCloudApi');
-		console.log(JSON.stringify(credentials));
-		if (!credentials) {
-			throw new NodeOperationError(this.getNode(), 'Credentials are mandatory!');
-		}
-
-		const { clientId, clientSecret, clusterId, clusterRegion } = credentials;
-
-		const zbc = new ZBClient({
-			camundaCloud: {
-				clientId,
-				clientSecret,
-				clusterId,
-				clusterRegion,
-			},
-		} as ZBClientOptions);
+		const zbc = await getZeebeClient.call(this);
 
 		const self = this;
 
